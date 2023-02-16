@@ -35,7 +35,6 @@ def _get_feats(
     features: List[Callable] = None,
     dict_freqs=FREQS,
 ):
-
     if features is None:
         features = [
             acf_features,
