@@ -125,27 +125,6 @@ def tsfeatures(
         a time series.
     """
 
-    if features is None:
-        features = [
-            acf_features,
-            arch_stat,
-            crossing_points,
-            entropy,
-            flat_spots,
-            heterogeneity,
-            holt_parameters,
-            lumpiness,
-            nonlinearity,
-            pacf_features,
-            stl_features,
-            stability,
-            hw_parameters,
-            unitroot_kpss,
-            unitroot_pp,
-            series_length,
-            hurst,
-        ]
-
     partial_get_feats = partial(
         _get_feats, freq=freq, scale=scale, features=features, dict_freqs=dict_freqs
     )
