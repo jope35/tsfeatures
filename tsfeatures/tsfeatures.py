@@ -15,6 +15,7 @@ os.environ["OMP_NUM_THREADS"] = "1"
 
 # %% ../nbs/01_tsfeatures_core.ipynb 3
 from typing import Callable, Dict, List, Optional
+from collections import ChainMap
 from multiprocessing import Pool
 from functools import partial
 
@@ -30,28 +31,32 @@ def _get_feats(
     index,
     ts,
     freq,
-    scale=True,
-    features=[
-        acf_features,
-        arch_stat,
-        crossing_points,
-        entropy,
-        flat_spots,
-        heterogeneity,
-        holt_parameters,
-        lumpiness,
-        nonlinearity,
-        pacf_features,
-        stl_features,
-        stability,
-        hw_parameters,
-        unitroot_kpss,
-        unitroot_pp,
-        series_length,
-        hurst,
-    ],
+    scale: bool = True,
+    features: List[Callable] = None,
     dict_freqs=FREQS,
 ):
+
+    if features is None:
+        features = [
+            acf_features,
+            arch_stat,
+            crossing_points,
+            entropy,
+            flat_spots,
+            heterogeneity,
+            holt_parameters,
+            lumpiness,
+            nonlinearity,
+            pacf_features,
+            stl_features,
+            stability,
+            hw_parameters,
+            unitroot_kpss,
+            unitroot_pp,
+            series_length,
+            hurst,
+        ]
+
     if freq is None:
         inf_freq = pd.infer_freq(ts["ds"])
         if inf_freq is None:
@@ -89,25 +94,7 @@ def _get_feats(
 def tsfeatures(
     ts: pd.DataFrame,
     freq: Optional[int] = None,
-    features: List[Callable] = [
-        acf_features,
-        arch_stat,
-        crossing_points,
-        entropy,
-        flat_spots,
-        heterogeneity,
-        holt_parameters,
-        lumpiness,
-        nonlinearity,
-        pacf_features,
-        stl_features,
-        stability,
-        hw_parameters,
-        unitroot_kpss,
-        unitroot_pp,
-        series_length,
-        hurst,
-    ],
+    features: List[Callable] = None,
     dict_freqs: Dict[str, int] = FREQS,
     scale: bool = True,
     threads: Optional[int] = None,
@@ -138,12 +125,30 @@ def tsfeatures(
         Pandas DataFrame where each column is a feature and each row
         a time series.
     """
+
+    if features is None:
+        features = [
+            acf_features,
+            arch_stat,
+            crossing_points,
+            entropy,
+            flat_spots,
+            heterogeneity,
+            holt_parameters,
+            lumpiness,
+            nonlinearity,
+            pacf_features,
+            stl_features,
+            stability,
+            hw_parameters,
+            unitroot_kpss,
+            unitroot_pp,
+            series_length,
+            hurst,
+        ]
+
     partial_get_feats = partial(
-        _get_feats,
-        freq=freq,
-        scale=scale,
-        features=features,
-        dict_freqs=dict_freqs,
+        _get_feats, freq=freq, scale=scale, features=features, dict_freqs=dict_freqs
     )
 
     with Pool(threads) as pool:
