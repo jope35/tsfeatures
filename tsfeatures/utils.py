@@ -4,23 +4,21 @@
 __all__ = ['FREQS', 'WWWusage', 'USAccDeaths', 'scalets', 'poly', 'embed', 'terasvirta_test', 'hurst_exponent', 'ur_pp',
            'lambda_coef_var']
 
-# %% ../nbs/00_utils.ipynb 2
+# %% ../nbs/00_utils.ipynb 3
 import numpy as np
 import statsmodels.api as sm
 
 # from scipy.signal import periodogram, welch
 
-np.seterr(divide="ignore", invalid="ignore")
-
-# %% ../nbs/00_utils.ipynb 3
+# %% ../nbs/00_utils.ipynb 5
 FREQS = {"H": 24, "D": 1, "M": 12, "Q": 4, "W": 1, "Y": 1}
 
-# %% ../nbs/00_utils.ipynb 4
+# %% ../nbs/00_utils.ipynb 6
 def scalets(x: np.array) -> float:
     """Mean-std scale."""
     return (x - x.mean()) / x.std(ddof=1)
 
-# %% ../nbs/00_utils.ipynb 5
+# %% ../nbs/00_utils.ipynb 7
 def poly(x: np.array, p: int) -> np.array:
     """Returns or evaluates orthogonal polynomials of degree 1 to degree over the
        specified set of points x:
@@ -41,7 +39,7 @@ def poly(x: np.array, p: int) -> np.array:
 
     return np.linalg.qr(X)[0][:, 1:]
 
-# %% ../nbs/00_utils.ipynb 6
+# %% ../nbs/00_utils.ipynb 8
 def embed(x: np.array, p: int) -> np.array:
     """Embeds the time series x into a low-dimensional Euclidean space.
 
@@ -59,7 +57,7 @@ def embed(x: np.array, p: int) -> np.array:
     x = np.transpose(np.vstack([np.roll(x, k) for k in range(p)]))
     return x[p - 1 :]
 
-# %% ../nbs/00_utils.ipynb 8
+# %% ../nbs/00_utils.ipynb 10
 def terasvirta_test(x: np.array, lag: int = 1, scale: bool = True) -> float:
     """Generically computes Teraesvirta's neural network test for neglected
        nonlinearity either for the time series x or the regression y~x.
@@ -124,7 +122,7 @@ def terasvirta_test(x: np.array, lag: int = 1, scale: bool = True) -> float:
 
     return stat
 
-# %% ../nbs/00_utils.ipynb 9
+# %% ../nbs/00_utils.ipynb 11
 def hurst_exponent(x: np.array) -> float:
     """Computes hurst exponent.
 
@@ -156,7 +154,7 @@ def hurst_exponent(x: np.array) -> float:
 
     return hurst_exponent
 
-# %% ../nbs/00_utils.ipynb 10
+# %% ../nbs/00_utils.ipynb 12
 def ur_pp(x: np.array) -> float:
     """Performs the Phillips and Perron unit root test.
 
@@ -208,7 +206,7 @@ def ur_pp(x: np.array) -> float:
 
     return test_stat
 
-# %% ../nbs/00_utils.ipynb 11
+# %% ../nbs/00_utils.ipynb 13
 def lambda_coef_var(lambda_par: float, x: np.array, period: int = 2):
     """Calculates coefficient of variation for subseries of x.
 
@@ -244,7 +242,7 @@ def lambda_coef_var(lambda_par: float, x: np.array, period: int = 2):
 
     return value
 
-# %% ../nbs/00_utils.ipynb 13
+# %% ../nbs/00_utils.ipynb 15
 WWWusage = [
     88,
     84,

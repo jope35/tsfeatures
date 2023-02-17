@@ -3,17 +3,18 @@
 # %% auto 0
 __all__ = ['tsfeatures']
 
-# %% ../nbs/01_tsfeatures_core.ipynb 2
+# %% ../nbs/01_tsfeatures_core.ipynb 3
 import warnings
-
-warnings.warn = lambda *a, **kw: False
 import os
+
+# %% ../nbs/01_tsfeatures_core.ipynb 4
+warnings.warn = lambda *a, **kw: False
 
 os.environ["MKL_NUM_THREADS"] = "1"
 os.environ["NUMEXPR_NUM_THREADS"] = "1"
 os.environ["OMP_NUM_THREADS"] = "1"
 
-# %% ../nbs/01_tsfeatures_core.ipynb 3
+# %% ../nbs/01_tsfeatures_core.ipynb 5
 from typing import Callable, Dict, List, Optional
 from collections import ChainMap
 from multiprocessing import Pool
@@ -22,40 +23,38 @@ from functools import partial
 import numpy as np
 import pandas as pd
 
-# %% ../nbs/01_tsfeatures_core.ipynb 4
+# %% ../nbs/01_tsfeatures_core.ipynb 6
 from .features import *
 from .utils import *
 
-# %% ../nbs/01_tsfeatures_core.ipynb 5
+# %% ../nbs/01_tsfeatures_core.ipynb 7
 def _get_feats(
     index,
     ts,
     freq,
-    scale: bool = True,
-    features: List[Callable] = None,
+    scale=True,
+    features=[
+        acf_features,
+        arch_stat,
+        crossing_points,
+        entropy,
+        flat_spots,
+        heterogeneity,
+        holt_parameters,
+        lumpiness,
+        nonlinearity,
+        pacf_features,
+        stl_features,
+        stability,
+        hw_parameters,
+        unitroot_kpss,
+        unitroot_pp,
+        series_length,
+        hurst,
+    ],
     dict_freqs=FREQS,
 ):
-    if features is None:
-        features = [
-            acf_features,
-            arch_stat,
-            crossing_points,
-            entropy,
-            flat_spots,
-            heterogeneity,
-            holt_parameters,
-            lumpiness,
-            nonlinearity,
-            pacf_features,
-            stl_features,
-            stability,
-            hw_parameters,
-            unitroot_kpss,
-            unitroot_pp,
-            series_length,
-            hurst,
-        ]
-
+    print("dict_freq")
     if freq is None:
         inf_freq = pd.infer_freq(ts["ds"])
         if inf_freq is None:
@@ -89,11 +88,29 @@ def _get_feats(
 
     return pd.DataFrame(dict(c_map), index=[index])
 
-# %% ../nbs/01_tsfeatures_core.ipynb 6
+# %% ../nbs/01_tsfeatures_core.ipynb 8
 def tsfeatures(
     ts: pd.DataFrame,
     freq: Optional[int] = None,
-    features: List[Callable] = None,
+    features: List[Callable] = [
+        acf_features,
+        arch_stat,
+        crossing_points,
+        entropy,
+        flat_spots,
+        heterogeneity,
+        holt_parameters,
+        lumpiness,
+        nonlinearity,
+        pacf_features,
+        stl_features,
+        stability,
+        hw_parameters,
+        unitroot_kpss,
+        unitroot_pp,
+        series_length,
+        hurst,
+    ],
     dict_freqs: Dict[str, int] = FREQS,
     scale: bool = True,
     threads: Optional[int] = None,
@@ -124,7 +141,6 @@ def tsfeatures(
         Pandas DataFrame where each column is a feature and each row
         a time series.
     """
-
     partial_get_feats = partial(
         _get_feats, freq=freq, scale=scale, features=features, dict_freqs=dict_freqs
     )

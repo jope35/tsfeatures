@@ -5,21 +5,21 @@ __all__ = ['acf_features', 'arch_stat', 'count_entropy', 'crossing_points', 'ent
            'heterogeneity', 'holt_parameters', 'hurst', 'hw_parameters', 'intervals', 'lumpiness', 'nonlinearity',
            'pacf_features', 'series_length', 'sparsity', 'stability', 'stl_features', 'unitroot_kpss', 'unitroot_pp']
 
-# %% ../nbs/02_features.ipynb 2
+# %% ../nbs/02_features.ipynb 3
 import warnings
 
-# %% ../nbs/02_features.ipynb 3
+# %% ../nbs/02_features.ipynb 4
 warnings.warn = lambda *a, **kw: False
 
-# %% ../nbs/02_features.ipynb 4
+# %% ../nbs/02_features.ipynb 5
 import os
 
-# %% ../nbs/02_features.ipynb 5
+# %% ../nbs/02_features.ipynb 6
 os.environ["MKL_NUM_THREADS"] = "1"
 os.environ["NUMEXPR_NUM_THREADS"] = "1"
 os.environ["OMP_NUM_THREADS"] = "1"
 
-# %% ../nbs/02_features.ipynb 6
+# %% ../nbs/02_features.ipynb 7
 from collections import ChainMap
 from functools import partial
 from itertools import groupby
@@ -53,7 +53,7 @@ from tsfeatures.utils import (
     ur_pp,
 )
 
-# %% ../nbs/02_features.ipynb 7
+# %% ../nbs/02_features.ipynb 8
 def acf_features(x: np.array, freq: int = 1) -> Dict[str, float]:
     """Calculates autocorrelation function features.
 
@@ -119,7 +119,7 @@ def acf_features(x: np.array, freq: int = 1) -> Dict[str, float]:
 
     return output
 
-# %% ../nbs/02_features.ipynb 10
+# %% ../nbs/02_features.ipynb 11
 def arch_stat(
     x: np.array, freq: int = 1, lags: int = 12, demean: bool = True
 ) -> Dict[str, float]:
@@ -154,7 +154,7 @@ def arch_stat(
 
     return {"arch_lm": r_squared}
 
-# %% ../nbs/02_features.ipynb 12
+# %% ../nbs/02_features.ipynb 14
 def count_entropy(x: np.array, freq: int = 1) -> Dict[str, float]:
     """Count entropy.
 
@@ -175,7 +175,7 @@ def count_entropy(x: np.array, freq: int = 1) -> Dict[str, float]:
 
     return {"count_entropy": entropy}
 
-# %% ../nbs/02_features.ipynb 13
+# %% ../nbs/02_features.ipynb 15
 def crossing_points(x: np.array, freq: int = 1) -> Dict[str, float]:
     """Crossing points.
 
@@ -200,7 +200,7 @@ def crossing_points(x: np.array, freq: int = 1) -> Dict[str, float]:
 
     return {"crossing_points": cross.sum()}
 
-# %% ../nbs/02_features.ipynb 14
+# %% ../nbs/02_features.ipynb 16
 def entropy(x: np.array, freq: int = 1, base: float = e) -> Dict[str, float]:
     """Calculates sample entropy.
 
@@ -224,7 +224,7 @@ def entropy(x: np.array, freq: int = 1, base: float = e) -> Dict[str, float]:
 
     return {"entropy": entropy}
 
-# %% ../nbs/02_features.ipynb 15
+# %% ../nbs/02_features.ipynb 17
 def flat_spots(x: np.array, freq: int = 1) -> Dict[str, float]:
     """Flat spots.
 
@@ -247,7 +247,7 @@ def flat_spots(x: np.array, freq: int = 1) -> Dict[str, float]:
 
     rlex = np.array([sum(1 for i in g) for k, g in groupby(cutx)]).max()
 
-# %% ../nbs/02_features.ipynb 16
+# %% ../nbs/02_features.ipynb 18
 def frequency(x: np.array, freq: int = 1) -> Dict[str, float]:
     """Frequency.
 
@@ -266,7 +266,7 @@ def frequency(x: np.array, freq: int = 1) -> Dict[str, float]:
 
     return {"frequency": freq}
 
-# %% ../nbs/02_features.ipynb 17
+# %% ../nbs/02_features.ipynb 19
 def guerrero(
     x: np.array, freq: int = 1, lower: int = -1, upper: int = 2
 ) -> Dict[str, float]:
@@ -301,7 +301,7 @@ def guerrero(
 
     return {"guerrero": min_}
 
-# %% ../nbs/02_features.ipynb 18
+# %% ../nbs/02_features.ipynb 20
 def heterogeneity(x: np.array, freq: int = 1) -> Dict[str, float]:
     """Heterogeneity.
 
@@ -364,7 +364,7 @@ def heterogeneity(x: np.array, freq: int = 1) -> Dict[str, float]:
 
     return output
 
-# %% ../nbs/02_features.ipynb 19
+# %% ../nbs/02_features.ipynb 21
 def holt_parameters(x: np.array, freq: int = 1) -> Dict[str, float]:
     """Fitted parameters of a Holt model.
 
@@ -392,7 +392,7 @@ def holt_parameters(x: np.array, freq: int = 1) -> Dict[str, float]:
 
     return params
 
-# %% ../nbs/02_features.ipynb 20
+# %% ../nbs/02_features.ipynb 22
 def hurst(x: np.array, freq: int = 1) -> Dict[str, float]:
     """Hurst index.
 
@@ -415,7 +415,7 @@ def hurst(x: np.array, freq: int = 1) -> Dict[str, float]:
 
     return {"hurst": hurst_index}
 
-# %% ../nbs/02_features.ipynb 21
+# %% ../nbs/02_features.ipynb 23
 def hw_parameters(x: np.array, freq: int = 1) -> Dict[str, float]:
     """Fitted parameters of a Holt-Winters model.
 
@@ -447,7 +447,7 @@ def hw_parameters(x: np.array, freq: int = 1) -> Dict[str, float]:
 
     return params
 
-# %% ../nbs/02_features.ipynb 22
+# %% ../nbs/02_features.ipynb 24
 def intervals(x: np.array, freq: int = 1) -> Dict[str, float]:
     """Intervals with demand.
 
@@ -471,7 +471,7 @@ def intervals(x: np.array, freq: int = 1) -> Dict[str, float]:
 
     return {"intervals_mean": np.mean(y), "intervals_sd": np.std(y, ddof=1)}
 
-# %% ../nbs/02_features.ipynb 23
+# %% ../nbs/02_features.ipynb 25
 def lumpiness(x: np.array, freq: int = 1) -> Dict[str, float]:
     """lumpiness.
 
@@ -505,7 +505,7 @@ def lumpiness(x: np.array, freq: int = 1) -> Dict[str, float]:
 
     return {"lumpiness": lumpiness}
 
-# %% ../nbs/02_features.ipynb 24
+# %% ../nbs/02_features.ipynb 26
 def nonlinearity(x: np.array, freq: int = 1) -> Dict[str, float]:
     """Nonlinearity.
 
@@ -530,7 +530,7 @@ def nonlinearity(x: np.array, freq: int = 1) -> Dict[str, float]:
 
     return {"nonlinearity": test}
 
-# %% ../nbs/02_features.ipynb 25
+# %% ../nbs/02_features.ipynb 27
 def pacf_features(x: np.array, freq: int = 1) -> Dict[str, float]:
     """Calculates partial autocorrelation function features.
 
@@ -601,7 +601,7 @@ def pacf_features(x: np.array, freq: int = 1) -> Dict[str, float]:
 
     return output
 
-# %% ../nbs/02_features.ipynb 26
+# %% ../nbs/02_features.ipynb 28
 def series_length(x: np.array, freq: int = 1) -> Dict[str, float]:
     """Series length.
 
@@ -620,7 +620,7 @@ def series_length(x: np.array, freq: int = 1) -> Dict[str, float]:
 
     return {"series_length": len(x)}
 
-# %% ../nbs/02_features.ipynb 27
+# %% ../nbs/02_features.ipynb 29
 def sparsity(x: np.array, freq: int = 1) -> Dict[str, float]:
     """Sparsity.
 
@@ -639,7 +639,7 @@ def sparsity(x: np.array, freq: int = 1) -> Dict[str, float]:
 
     return {"sparsity": np.mean(x == 0)}
 
-# %% ../nbs/02_features.ipynb 28
+# %% ../nbs/02_features.ipynb 30
 def stability(x: np.array, freq: int = 1) -> Dict[str, float]:
     """Stability.
 
@@ -673,7 +673,7 @@ def stability(x: np.array, freq: int = 1) -> Dict[str, float]:
 
     return {"stability": stability}
 
-# %% ../nbs/02_features.ipynb 29
+# %% ../nbs/02_features.ipynb 31
 def stl_features(x: np.array, freq: int = 1) -> Dict[str, float]:
     """Calculates seasonal trend using loess decomposition.
 
@@ -814,7 +814,7 @@ def stl_features(x: np.array, freq: int = 1) -> Dict[str, float]:
 
     return output
 
-# %% ../nbs/02_features.ipynb 30
+# %% ../nbs/02_features.ipynb 32
 def unitroot_kpss(x: np.array, freq: int = 1) -> Dict[str, float]:
     """Unit root kpss.
 
@@ -840,7 +840,7 @@ def unitroot_kpss(x: np.array, freq: int = 1) -> Dict[str, float]:
 
     return {"unitroot_kpss": test_kpss}
 
-# %% ../nbs/02_features.ipynb 31
+# %% ../nbs/02_features.ipynb 33
 def unitroot_pp(x: np.array, freq: int = 1) -> Dict[str, float]:
     """Unit root pp.
 
